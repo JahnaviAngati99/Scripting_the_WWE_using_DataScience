@@ -1,0 +1,313 @@
+Last login: Mon Nov 27 10:00:27 on ttys000
+(base) jahnaviangati@Jahnavis-MacBook-Air ~ % MONGOSH
+Current Mongosh Log ID:	6564bd4fd86ef6c66b3ef3e7
+Connecting to:		mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.0
+Using MongoDB:		7.0.2
+Using Mongosh:		2.1.0
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2023-11-26T15:35:50.290-06:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+test> use FINALCOMMENTS
+switched to db FINALCOMMENTS
+FINALCOMMENTS> // For positive sentiment
+
+FINALCOMMENTS> db.finalComments.aggregate([
+...   { $match: { Sentiment_Words: "Positive" } }, // Filter for positive sentiments
+...   {
+...     $group: {
+...       _id: "$Author", // Assuming Author refers to the wrestler, but you might need another identifier
+...       count: { $sum: 1 }
+...     }
+...   },
+...   { $sort: { count: -1 } }
+... ])
+[
+  { _id: 'demarco adkins', count: 682 },
+  { _id: 'SKeL GOOAALL', count: 336 },
+  { _id: 'WrestleTalk', count: 326 },
+  { _id: 'Micheal Wilson', count: 154 },
+  { _id: 'rkmanzo', count: 108 },
+  { _id: 'Antonio Gutierrez', count: 74 },
+  { _id: 'Dark Starr', count: 56 },
+  { _id: 'James Brockington Jr.', count: 34 },
+  { _id: 'F. K.', count: 32 },
+  { _id: 'ChronoXShadow', count: 32 },
+  { _id: 'Mike Besk', count: 30 },
+  { _id: 'underwearskids', count: 30 },
+  { _id: 'S from', count: 30 },
+  { _id: 'Dillon Haggett', count: 28 },
+  { _id: 'Jacob Navarro', count: 28 },
+  { _id: 'Gary Hen', count: 28 },
+  { _id: 'David Moses Israel (Issachar)', count: 26 },
+  { _id: 'rob91Harvey', count: 26 },
+  { _id: 'Jamond Ross', count: 24 },
+  { _id: 'Cameron Morgan', count: 24 }
+]
+Type "it" for more
+FINALCOMMENTS> // For negative sentiment
+
+FINALCOMMENTS> db.finalComments.aggregate([
+...   { $match: { Sentiment_Words: "Negative" } }, // Filter for negative sentiments
+...   {
+...     $group: {
+...       _id: "$Author", // Assuming Author refers to the wrestler, but you might need another identifier
+...       count: { $sum: 1 }
+...     }
+...   },
+...   { $sort: { count: -1 } }
+... ])
+[
+  { _id: 'WrestleTalk', count: 334 },
+  { _id: 'SKeL GOOAALL', count: 286 },
+  { _id: 'demarco adkins', count: 82 },
+  { _id: 'Dillon Haggett', count: 34 },
+  { _id: 'Jacob Navarro', count: 34 },
+  { _id: 'Mike Besk', count: 26 },
+  { _id: 'Antonio Gutierrez', count: 24 },
+  { _id: 'Dark Starr', count: 22 },
+  { _id: 'OneManCast', count: 22 },
+  { _id: 'James Brockington Jr.', count: 20 },
+  { _id: 'Jashmail Mathis', count: 16 },
+  { _id: 'rob91Harvey', count: 16 },
+  { _id: 'Luis Pineda Jr.', count: 16 },
+  { _id: 'F. K.', count: 14 },
+  { _id: 'underwearskids', count: 14 },
+  { _id: 'Raven Zombie', count: 12 },
+  { _id: 'Dunkey Is Black', count: 12 },
+  { _id: 'Xhumed', count: 12 },
+  { _id: 'GS T', count: 12 },
+  { _id: 'Daminashun', count: 12 }
+]
+Type "it" for more
+FINALCOMMENTS> // For neutral sentiment
+
+FINALCOMMENTS> db.finalComments.aggregate([
+...   { $match: { Sentiment_Words: "Neutral" } }, // Filter for neutral sentiments
+...   {
+...     $group: {
+...       _id: "$Author", // Assuming Author refers to the wrestler, but you might need another identifier
+...       count: { $sum: 1 }
+...     }
+...   },
+...   { $sort: { count: -1 } }
+... ])
+[
+  { _id: 'SKeL GOOAALL', count: 110 },
+  { _id: 'Micheal Wilson', count: 82 },
+  { _id: 'WrestleTalk', count: 38 },
+  { _id: 'David Moses Israel (Issachar)', count: 32 },
+  { _id: 'rkmanzo', count: 26 },
+  { _id: 'Luis Pineda Jr.', count: 24 },
+  { _id: 'Neil Haley', count: 22 },
+  { _id: 'Dillon Haggett', count: 22 },
+  { _id: 'Antonio Gutierrez', count: 22 },
+  { _id: 'Gary Hen', count: 20 },
+  { _id: 'Ryan S', count: 18 },
+  { _id: 'Zedric Copeland', count: 16 },
+  { _id: 'Synyster Goose', count: 16 },
+  { _id: 'Tyler Skaife', count: 16 },
+  { _id: 'underwearskids', count: 16 },
+  { _id: 'James Brockington Jr.', count: 14 },
+  { _id: 'Lady Mary- Katherine Elizabeth Wojtyla-McRaven', count: 12 },
+  { _id: 'Free Bird', count: 12 },
+  { _id: 'Tarrance Sutton', count: 12 },
+  { _id: 'Reggielacey 223', count: 12 }
+]
+Type "it" for more
+FINALCOMMENTS> db.finalComments.aggregate([
+...   {
+...     $group: {
+...       _id: { $dateToString: { format: "%Y-%m-%d", date: "$timestamp" } }, // Assuming there's a 'timestamp' field
+...       averageSentiment: { $avg: "$Sentiment" },
+...       positiveCount: {
+...         $sum: { $cond: [{ $eq: ["$Sentiment_Words", "Positive"] }, 1, 0] }
+...       },
+...       negativeCount: {
+...         $sum: { $cond: [{ $eq: ["$Sentiment_Words", "Negative"] }, 1, 0] }
+...       },
+...       neutralCount: {
+...         $sum: { $cond: [{ $eq: ["$Sentiment_Words", "Neutral"] }, 1, 0] }
+...       }
+...     }
+...   },
+...   { $sort: { "_id": 1 } }
+... ])
+[
+  {
+    _id: null,
+    averageSentiment: 0.16169780188409935,
+    positiveCount: 10558,
+    negativeCount: 5404,
+    neutralCount: 5056
+  }
+]
+FINALCOMMENTS> db.finalComments.aggregate([
+...   {
+...     $project: {
+...       words: { $split: [{ $toString: "$Comment_No_Stopword" }, " "] } // Convert to string before split
+...     }
+...   },
+...   { $unwind: "$words" },
+...   {
+...     $group: {
+...       _id: "$words",
+...       count: { $sum: 1 }
+...     }
+...   },
+...   { $sort: { count: -1 } },
+...   { $limit: 10 } // Top 10 most common words
+... ])
+[
+  { _id: '-', count: 4934 },
+  { _id: 'WWE', count: 3750 },
+  { _id: 'AEW', count: 2706 },
+  { _id: 'like', count: 2448 },
+  { _id: 'would', count: 1752 },
+  { _id: 'wrestling', count: 1618 },
+  { _id: 'think', count: 1574 },
+  { _id: 'know', count: 1400 },
+  { _id: 'see', count: 1392 },
+  { _id: 'match', count: 1384 }
+]
+FINALCOMMENTS> use WRESTLERINFO
+switched to db WRESTLERINFO
+WRESTLERINFO> db.wrestlerInfo.aggregate([
+...   {
+...     $group: {
+...       _id: "$Ring Name", // Group by the wrestler ring name
+...       count: { $sum: 1 } // Count occurrences
+...     }
+...   },
+...   {
+...     $sort: { count: -1 } // Sort by count in descending order
+...   }
+... ])
+[
+  { _id: 'Nikki Cross', count: 2 },
+  { _id: 'Thea Hail', count: 2 },
+  { _id: 'Meiko Satomura', count: 2 },
+  { _id: 'Ivy Nile', count: 2 },
+  { _id: 'Tatsumi Fujinami', count: 2 },
+  { _id: 'RTruth', count: 2 },
+  { _id: 'Tatum Paxley', count: 2 },
+  { _id: 'Boa', count: 2 },
+  { _id: 'Blair Davenport', count: 2 },
+  { _id: 'Tyler Bate', count: 2 },
+  { _id: 'Wade Barrett', count: 2 },
+  { _id: 'Scrypts', count: 2 },
+  { _id: 'Roxanne Perez', count: 2 },
+  { _id: 'Sanga', count: 2 },
+  { _id: 'Brutus Creed', count: 2 },
+  { _id: 'Vince McMahon', count: 2 },
+  { _id: 'Brock Lesnar', count: 2 },
+  { _id: 'Dijak', count: 2 },
+  { _id: 'Asuka', count: 2 },
+  { _id: 'Zelina Vega', count: 2 }
+]
+Type "it" for more
+WRESTLERINFO> db.wrestlerInfo.aggregate([
+...   {
+...     $group: {
+...       _id: "$Finisher", // Group by the finisher move
+...       count: { $sum: 1 } // Count occurrences of each finisher move
+...     }
+...   },
+...   {
+...     $sort: { count: -1 } // Sort by count in descending order
+...   }
+... ])
+[
+  { _id: 'Running Powerslam', count: 4 },
+  { _id: 'Samoan Splash', count: 4 },
+  { _id: 'Code Red', count: 4 },
+  { _id: 'Spinning Heel Kick', count: 4 },
+  { _id: '630° Senton', count: 4 },
+  { _id: 619, count: 4 },
+  { _id: 'The Final Prayer', count: 2 },
+  { _id: 'Devlin Side / Devil Inside', count: 2 },
+  { _id: 'Stunner', count: 2 },
+  { _id: "Gallows Pole / Hangman's Noose", count: 2 },
+  { _id: 'McMahon Stunner', count: 2 },
+  { _id: 'Diving Split Legdrop', count: 2 },
+  { _id: 'Pop-Up Kneeling Powerbomb', count: 2 },
+  { _id: 'Rocket Kick', count: 2 },
+  { _id: 'Khallas', count: 2 },
+  { _id: 'Cervical Clutch', count: 2 },
+  { _id: 'Caber Toss Suplex', count: 2 },
+  { _id: 'Big Top Pop', count: 2 },
+  { _id: 'Death Rowe', count: 2 },
+  { _id: 'Flawless Victory', count: 2 }
+]
+Type "it" for more
+WRESTLERINFO> db.wrestlerInfo.aggregate([
+...   {
+...     $lookup: {
+...       from: "finalComments",
+...       localField: "Ring Name",
+...       foreignField: "Author", // Replace with actual field that references the wrestler
+...       as: "comments"
+...     }
+...   },
+...   { $unwind: "$comments" },
+...   {
+...     $group: {
+...       _id: "$Gender",
+...       averageSentiment: { $avg: "$comments.Sentiment" }
+...     }
+...   },
+...   { $sort: { averageSentiment: -1 } }
+... ])
+
+WRESTLERINFO> db.wrestlerInfo.aggregate([
+...   {
+...     $group: {
+...       _id: "$Gender", // Group by the gender field
+...       numberOfWrestlers: { $sum: 1 } // Count the number of wrestlers per gender
+...     }
+...   },
+...   {
+...     $sort: { numberOfWrestlers: -1 } // Sort by the count in descending order
+...   }
+... ])
+[
+  { _id: 'Male', numberOfWrestlers: 238 },
+  { _id: 'Female', numberOfWrestlers: 128 }
+]
+WRESTLERINFO> db.wrestlerInfo.aggregate([
+...   {
+...     $group: {
+...       _id: "$Birth Place",
+...       count: { $sum: 1 }
+...     }
+...   },
+...   { $sort: { count: -1 } }
+... ])
+[
+  { _id: 'Glasgow, Scotland', count: 10 },
+  { _id: 'Los Angeles, California', count: 6 },
+  { _id: 'Knoxville, Tennessee', count: 6 },
+  { _id: 'Chicago, Illinois', count: 4 },
+  { _id: 'Queens, New York', count: 4 },
+  { _id: 'Lagos, Nigeria', count: 4 },
+  { _id: 'Sydney, New South Wales, Australia', count: 4 },
+  { _id: 'Sacramento, California', count: 4 },
+  { _id: 'Cleveland, Ohio', count: 4 },
+  { _id: 'Tampa, Florida', count: 4 },
+  { _id: 'Charlotte, North Carolina', count: 4 },
+  { _id: 'Calgary, Alberta, Canada', count: 4 },
+  { _id: 'San Francisco, California', count: 4 },
+  { _id: 'Pittsburgh, Pennsylvania', count: 4 },
+  { _id: 'Monterrey, Nuevo León, Mexico', count: 2 },
+  { _id: 'Limerick, Republic of Ireland', count: 2 },
+  { _id: 'Penwortham, Lancashire, England', count: 2 },
+  { _id: 'Edgewater, Illinois', count: 2 },
+  { _id: 'Tokyo, Japan', count: 2 },
+  { _id: 'Springfield, Missouri', count: 2 }
+]
+Type "it" for more
+WRESTLERINFO> 
